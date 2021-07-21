@@ -23,6 +23,7 @@ Class admin extends Connection{
                         'country' => $row->country,
                         'password' => $row->pass,
                         'plan'=> $row->plans,
+                        'referredby' => $row->referredby,
                         'accountbalance' => (double)$row->accountbalance,
                         'currency' => $row->currency,
                         'createdAt' => $row->createdAt
