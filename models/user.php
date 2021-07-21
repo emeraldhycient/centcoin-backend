@@ -29,18 +29,34 @@ class users extends Connection{
 
     }
 
-    public static  function makeWithdrawal($userid,$bankname,$routingnumber,$accountname,$accountnumber,$amount)
+    public static function updateuser($userid,$fullname,$username,$password,$email,$accountbalance,$plan,$currency,$isadmin,$status)
     {
-        $bankname = self::filter($bankname);
-        $routingnumber = self::filter($routingnumber);
-        $accountname = self::filter($accountname);
-        $accountnumber = self::filter($accountnumber);
-        $amount = self::filter($amount);
-        $userid = self::filter($userid);
-
-        $sql = "INSERT INTO withdrawal (userid,bankname,routing,accountname,accountnumber,amount) VALUES (?,?,?,?,?,?)";
+        $fullname = self::filter($fullname);
+        $username = self::filter($username);
+        $password = self::filter($password);
+        //$hashpassword = password_hash($password,PASSWORD_BCRYPT);
+        $email = self::filter($email);
+        $plan = self::filter($plan);
+        $country = self::filter($currency);
+        
+        $sql = "UPDATE users SET fullname = ? ,username = ?,pass= ?,email =?,accountbalance = ?,plans = ?,currency = ?,isAdmin = ? ,statuz =? WHERE userid =?";
         $query = self::$connect->prepare($sql);
-        $query->bind_param("ssisii",$userid,$bankname,$routingnumber,$accountname,$accountnumber,$amount);
+        $query->bind_param("ssssisssss",$fullname,$username,$password,$email,$accountbalance,$plan,$currency,$isadmin,$status,$userid);
+        $query->execute();
+        if($query->affected_rows >0){
+            return self::Response(200,'success',"user update  successfully",'');
+        }else{
+             return self::Response(500,'failed',"unable to update user".$query->error,'');
+        }
+   
+    }
+
+    public static  function makeWithdrawal($userid,$wallet,$amount)
+    {
+        
+        $sql = "INSERT INTO withdrawal (userid,wallet,amount) VALUES (?,?,?)";
+        $query = self::$connect->prepare($sql);
+        $query->bind_param("ssi",$userid,$wallet,$amount);
         $query->execute();
         if($query->affected_rows > 0){
             return self::Response(200,"success","withdrawal placed successfully",'');

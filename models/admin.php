@@ -130,10 +130,7 @@ Class admin extends Connection{
            while($row = $result->fetch_object()){
                $data["withdrawal"][$row->id]=[
                 'userid' => $row->userid,
-                'bankname' => $row->bankname,
-                'routing' => $row->routing,
-                'accountname' => $row->accountname,
-                'accountnumber' => $row->accountnumber,
+                'wallet' => $row->wallet,
                 'amount' => $row->amount,
                 'status' => $row->statuz,
                 'createdAt' => $row->createdAt               ];
@@ -155,10 +152,7 @@ Class admin extends Connection{
            while($row = $result->fetch_object()){
                $data["withdrawal"][$row->id]=[
                 'userid' => $row->userid,
-                'bankname' => $row->bankname,
-                'routing' => $row->routing,
-                'accountname' => $row->accountname,
-                'accountnumber' => $row->accountnumber,
+                'wallet' => $row->wallet,
                 'amount' => $row->amount,
                 'status' => $row->statuz,
                 'createdAt' => $row->createdAt               ];
@@ -349,5 +343,50 @@ Class admin extends Connection{
                }
       
           }
+
+          public static function deleteuser($userid)
+          {
+              $sql = " DELETE FROM users  WHERE userid = ?";
+              $query = self::$connect->prepare($sql);
+              $query->bind_param("s",$userid);
+              $query->execute();
+              if($query->affected_rows > 0){
+                  return self::Response(200,"success","user deleted successfully",'');   
+              }else{
+                  return self::Response(500,"failed","unable to delete user".$query->error,'');   
+              }        
+          }
+
+          public  static function userdetails($hash,$userid){
+
+            $sql = "SELECT * FROM users WHERE userid = ? ";
+            $query = self::$connect->prepare($sql);
+            $query->bind_param('s',$userid);
+            $query->execute();
+            $result = $query->get_result();
+            if($result->num_rows > 0){
+                 while($row = $result->fetch_object()){
+                          
+                            $data["user"] = [
+                                'userid'=> $row->userid,
+                                'isadmin'=> (boolean)$row->isAdmin,
+                                'fullname' => $row->fullname,
+                                'username' => $row->username,
+                                'email' => $row->email,
+                                'country' => $row->country,
+                                'password' => $row->pass,
+                                'status' => $row->statuz,
+                                'plan'=> $row->plans,
+                                'accountbalance' => $row->accountbalance,
+                                'currency' => $row->currency,
+                                'createdAt' => $row->createdAt
+                            ] ;
+                            return self::Response(200,'success','',$data);
+                 }
+            }else{
+                return self::Response(404,'failed','no user found','');
+            }
+      
+    }
 
 }

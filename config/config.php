@@ -28,7 +28,7 @@ class Connection {
     private static function connector()
     {
         try{
-            // self::$connect = new mysqli('localhost','msboujee_securebizbank','SQG]l{I4KvRd','msboujee_securebizbank');
+            // self::$connect = new mysqli('localhost','msboujee_centcoin','Hc6YRng95VvKwJp','msboujee_centcoin');
             self::$connect = new mysqli('localhost','root','','centcoin');
             if(! self::$connect){
                 throw new Exception("unable to connect to db :".self::$connect->connect_error, 1);
