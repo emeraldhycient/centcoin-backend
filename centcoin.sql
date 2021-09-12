@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jul 21, 2021 at 12:00 PM
--- Server version: 5.7.24
--- PHP Version: 7.2.19
+-- Host: 127.0.0.1
+-- Generation Time: Sep 12, 2021 at 04:19 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,7 +33,7 @@ CREATE TABLE `deposit` (
   `package` text NOT NULL,
   `statuz` varchar(255) NOT NULL DEFAULT 'active',
   `amount` int(255) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -51,6 +51,28 @@ INSERT INTO `deposit` (`id`, `userid`, `package`, `statuz`, `amount`, `createdAt
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `durations`
+--
+
+CREATE TABLE `durations` (
+  `id` int(11) NOT NULL,
+  `userid` varchar(255) NOT NULL,
+  `numDays` int(11) NOT NULL DEFAULT 0,
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `durations`
+--
+
+INSERT INTO `durations` (`id`, `userid`, `numDays`, `createdAt`) VALUES
+(12, '60f40bcf225b1', 3, '2021-09-12 15:18:10'),
+(13, '60f5453fca2b7', 3, '2021-09-12 15:18:10'),
+(14, '60f5476c364ee', 3, '2021-09-12 15:18:10');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `logindetails`
 --
 
@@ -58,7 +80,7 @@ CREATE TABLE `logindetails` (
   `id` int(11) NOT NULL,
   `userid` varchar(255) NOT NULL,
   `hashvalue` varchar(255) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -72,7 +94,7 @@ CREATE TABLE `messages` (
   `fullname` text NOT NULL,
   `email` varchar(255) NOT NULL,
   `messages` varchar(255) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -140,18 +162,18 @@ INSERT INTO `paymentmethod` (`id`, `bitcoin`, `ethereum`, `litecoin`, `paypal`, 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `userid` varchar(255) NOT NULL,
-  `fullname` text,
+  `fullname` text DEFAULT NULL,
   `username` varchar(255) NOT NULL,
   `pass` varchar(255) NOT NULL,
   `isAdmin` varchar(10) NOT NULL DEFAULT 'false',
   `email` varchar(255) NOT NULL,
-  `country` text,
+  `country` text DEFAULT NULL,
   `plans` varchar(11) DEFAULT NULL,
-  `accountbalance` int(255) DEFAULT '0',
-  `currency` text,
+  `accountbalance` int(255) DEFAULT 0,
+  `currency` text DEFAULT NULL,
   `referredby` varchar(255) DEFAULT NULL,
   `statuz` varchar(20) NOT NULL DEFAULT 'active',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -161,8 +183,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `userid`, `fullname`, `username`, `pass`, `isAdmin`, `email`, `country`, `plans`, `accountbalance`, `currency`, `referredby`, `statuz`, `createdAt`) VALUES
 (1, '60f40bcf225b1', 'emerald herold', 'emeranty', '12qw12', '', 'emerald@gmail.com', 'usd', 'basic plan', 14500, 'usd', '', 'active', '2021-07-18 12:09:03'),
 (2, 'wer23dfr', 'herold main', 'heroldmoney', '12qw123', 'true', 'emeraldhycient@gmail.com', 'america', NULL, 0, NULL, NULL, 'active', '2021-07-18 18:11:35'),
-(3, '60f5453fca2b7', 'emzy', 'emzy', 'Register1@', '', 'emzy@gmail.com', 'pound', 'basic', 5000, 'pound', '', 'active', '2021-07-19 10:26:23'),
-(4, '60f5476c364ee', 'gotgoodname', 'gotgoodname', 'Kingking1@', 'false', 'gotgoodname@gmail.com', 'euro', 'silver', 2000, 'euro ', '', 'active', '2021-07-19 10:35:40');
+(3, '60f5453fca2b7', 'emzy', 'emzy', 'Register1@', '', 'emzy@gmail.com', 'pound', 'basic plan', 5000, 'pound', '', 'active', '2021-07-19 10:26:23'),
+(4, '60f5476c364ee', 'gotgoodname', 'gotgoodname', 'Kingking1@', 'false', 'gotgoodname@gmail.com', 'euro', 'silver plan', 2000, 'euro ', '', 'active', '2021-07-19 10:35:40');
 
 -- --------------------------------------------------------
 
@@ -176,7 +198,7 @@ CREATE TABLE `withdrawal` (
   `wallet` varchar(255) NOT NULL,
   `amount` int(255) NOT NULL,
   `statuz` varchar(30) NOT NULL DEFAULT 'pending',
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -195,6 +217,12 @@ INSERT INTO `withdrawal` (`id`, `userid`, `wallet`, `amount`, `statuz`, `created
 -- Indexes for table `deposit`
 --
 ALTER TABLE `deposit`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `durations`
+--
+ALTER TABLE `durations`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -242,6 +270,12 @@ ALTER TABLE `withdrawal`
 --
 ALTER TABLE `deposit`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `durations`
+--
+ALTER TABLE `durations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `logindetails`
